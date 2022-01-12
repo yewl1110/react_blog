@@ -68,13 +68,7 @@ const textMap = {
   register: '회원가입',
 }
 
-// const AuthForm = ({ type, form, onChange, onSubmit }) => {
-const AuthForm = ({ type, onChange, onSubmit }) => {
-  const form = {
-    username: '',
-    password: '',
-    passwordConfirm: '',
-  }
+const AuthForm = ({ type, form, onChange, onSubmit }) => {
   return (
     <AuthFormBlock>
       <h3>{textMap[type]}</h3>
