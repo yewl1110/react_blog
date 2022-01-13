@@ -23,11 +23,12 @@ mongoose
 const app = new Koa()
 const router = new Router()
 
-router.use('/api', api.routes())
+// app.use(cors())
 
-app.use(cors())
 app.use(bodyParser())
 app.use(jwtMiddleware)
+
+router.use('/api', api.routes())
 
 app.use(router.routes()).use(router.allowedMethods())
 

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import AuthForm from '../../components/auth/AuthForm'
@@ -5,6 +6,7 @@ import { changeField, initializeForm, login } from '../../modules/auth'
 import { check } from '../../modules/user'
 
 const LoginForm = ({ navigation }) => {
+  const [error, setError] = useState(null)
   const dispatch = useDispatch()
   const { form, auth, authError, user } = useSelector(({ auth, user }) => ({
     form: auth.login,
@@ -38,6 +40,7 @@ const LoginForm = ({ navigation }) => {
     if (authError) {
       console.log('오류발생')
       console.log(authError)
+      setError('로그인 실패')
       return
     }
     if (auth) {
@@ -58,6 +61,7 @@ const LoginForm = ({ navigation }) => {
       form={form}
       onChange={onChange}
       onSubmit={onSubmit}
+      error={error}
     />
   )
 }
