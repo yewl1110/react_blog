@@ -1,13 +1,15 @@
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from '../../../node_modules/react-router-dom/index'
 import AuthForm from '../../components/auth/AuthForm'
 import { changeField, initializeForm, login } from '../../modules/auth'
 import { check } from '../../modules/user'
 
-const LoginForm = ({ navigation }) => {
+const LoginForm = () => {
   const [error, setError] = useState(null)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { form, auth, authError, user } = useSelector(({ auth, user }) => ({
     form: auth.login,
     auth: auth.auth,
@@ -51,9 +53,14 @@ const LoginForm = ({ navigation }) => {
 
   useEffect(() => {
     if (user) {
-      navigation('/')
+      navigate('/')
+      try {
+        localStorage.setItem('user', JSON.stringify(user))
+      } catch (e) {
+        console.log(e)
+      }
     }
-  }, [navigation, user])
+  }, [navigate, user])
 
   return (
     <AuthForm

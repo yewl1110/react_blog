@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { check } from '../../modules/user'
 import AuthForm from '../../components/auth/AuthForm'
@@ -9,6 +9,7 @@ import { withRouter, useNavigate } from 'react-router-dom'
 const RegisterForm = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const [error, setError] = useState(null)
   const { form, auth, authError, user } = useSelector(({ auth, user }) => ({
     form: auth.register,
     auth: auth.auth,
@@ -30,7 +31,15 @@ const RegisterForm = () => {
   const onSubmit = (e) => {
     e.preventDefault()
     const { username, password, passwordConfirm } = form
+    if ([username, password, passwordConfirm].includes('')) {
+      setError('빈칸을 모두 입력하세요')
+    }
     if (password !== passwordConfirm) {
+      setError('비밀번호가 일치하지 않습니다')
+      dispatch(changeField({ form: 'register', key: 'password', value: '' }))
+      dispatch(
+        changeField({ form: 'register', key: 'passwordConfirm', value: '' }),
+      )
       return
     }
     dispatch(register({ username, password }))
@@ -42,8 +51,11 @@ const RegisterForm = () => {
 
   useEffect(() => {
     if (authError) {
-      console.log('오류발생')
-      console.log(authError)
+      if (authError.response.status === 409) {
+        setError('이미 존재하는 계정명입니다.')
+        return
+      }
+      setError('회원가입 실패')
       return
     }
     if (auth) {
@@ -55,9 +67,13 @@ const RegisterForm = () => {
 
   useEffect(() => {
     if (user) {
-      console.log('checkAPI 성공')
-      console.log(user)
       navigate('/')
+
+      try {
+        localStorage.setItem('user', JSON.stringify(user))
+      } catch (e) {
+        console.log(e)
+      }
     }
   }, [navigate, user])
 
@@ -67,6 +83,7 @@ const RegisterForm = () => {
       form={form}
       onChange={onChange}
       onSubmit={onSubmit}
+      error={error}
     />
   )
 }

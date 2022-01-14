@@ -9,10 +9,13 @@ posts.post('/', checkLoggedIn, postsCtrl.write)
 
 const post = new Router()
 
+// /api/posts
 post.get('/', postsCtrl.read)
 post.delete('/', checkLoggedIn, postsCtrl.checkOwnPost, postsCtrl.remove)
 post.patch('/', checkLoggedIn, postsCtrl.checkOwnPost, postsCtrl.update)
 
+// /api/posts/:id
+// GET DELETE PATCH
 posts.use('/:id', postsCtrl.getPostById, post.routes())
 
 export default posts
