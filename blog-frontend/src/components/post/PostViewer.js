@@ -40,13 +40,13 @@ const PostViewer = ({ post, error, loading }) => {
   return (
     <PostViewerBlock>
       <PostHead>
-        <h1>제목</h1>
-        <SubInfo username={user.username} publishedDate={publishedDate} />
-        <Tags>
-          {tags.map((tag) => (
-            <div className="tag">#{tag}</div>
-          ))}
-        </Tags>
+        <h1>{title}</h1>
+        <SubInfo
+          username={user.username}
+          publishedDate={publishedDate}
+          hasMarginTop
+        />
+        <Tags tags={tags} />
       </PostHead>
       <PostContent dangerouslySetInnerHTML={{ __html: body }} />
     </PostViewerBlock>
